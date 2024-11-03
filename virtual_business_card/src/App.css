@@ -1,55 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
-}
-
-.logo-card {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  background-color: #909090;
-  padding: 10px 20px;
-  margin: 10px 20px;
-  border-radius: 25px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.logo-card:hover {
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.logo {
-  font-size: 24px;
-  margin-right: 10px;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #000000aa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  
 }
