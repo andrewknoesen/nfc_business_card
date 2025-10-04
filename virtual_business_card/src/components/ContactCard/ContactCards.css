@@ -1,0 +1,10 @@
+.contact-cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* or flex-start / space-between */
+  align-items: center;
+  width: 100%;
+  height: 100%; /* 👈 make sure it fills the available vertical space */
+  flex: 1; /* 👈 allow it to grow within the flex parent */
+  box-sizing: border-box;
+}
