@@ -7,7 +7,7 @@ import ContactCards from '../../components/ContactCard/ContactCards';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 
 import { changeRootBackgroundImage } from '../../components/Utils/BackgroundManager'
-
+import '../../App.css';
 import ProfilePic from './assets/Images/profile.png';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
   changeRootBackgroundImage(ProfilePic)
 
   return (
-    <div style={{ width: "80vw", minHeight: "80vh" }}>
+    <div className="app-container">
       <ProfileCard profilePic={ProfilePic} />
       <ContactCards icons={icons} />
     </div>

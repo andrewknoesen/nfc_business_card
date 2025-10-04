@@ -1,0 +1,12 @@
+services:
+  # Static site using nginx
+  web:
+    image: nginx:alpine
+    container_name: virtual_business_card
+    volumes:
+      - ./virtual_business_card/dist:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+    ports:
+      - "8000:80"
+    restart: unless-stopped
