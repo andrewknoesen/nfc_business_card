@@ -8,6 +8,6 @@ jobs:
   renovate:
     runs-on: ubuntu-latest
     steps:
-      - uses: renovatebot/github-action
+      - uses: renovatebot/github-action@latest
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
