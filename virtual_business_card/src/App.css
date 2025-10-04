@@ -3,19 +3,16 @@
   margin: 0 auto;
   padding: 0;
   text-align: center;
-  
 }
 
 .app-container {
   width: 80vw;
   min-height: 80vh;
-
 }
 
 /* On tablets/laptops and up */
 @media (min-width: 768px) {
   .app-container {
-
     display: flex;
     flex-direction: row; /* side-by-side */
     align-items: flex-start;
@@ -23,11 +20,10 @@
   }
 
   .app-container > *:first-child {
-    flex: 1; /* profile card takes left column */
-    max-width: 300px; /* optional fixed width for profile card */
+    flex: 2; /* profile card takes left column */
   }
 
   .app-container > *:last-child {
-    flex: 2; /* contact cards take right column */
+    flex: 1; /* contact cards take right column */
   }
 }

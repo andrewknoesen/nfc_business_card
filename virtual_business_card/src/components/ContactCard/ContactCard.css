@@ -1,37 +1,42 @@
 #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
-
+.parent-div {
+  width: 100%; /* fill contact-cards horizontally */
+  display: flex; /* optional – if you want content centered/aligned */
+  justify-content: center; /* or flex-start if you prefer left-aligned */
+}
 .logo-card {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
-    background-color: #f1e9d7;
-    color: rgb(30, 64, 38);
-    padding: 10px 20px;
-    margin: 10px 20px;
-    border-radius: 25px;
-    box-shadow: 
+  display: flex;
+  flex: 1;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  background-color: #f1e9d7;
+  color: rgb(30, 64, 38);
+  padding: 10px 20px;
+  margin: 10px 20px;
+  border-radius: 25px;
+  box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.1),
     0 0 0 10px rgba(0, 0, 0, 0.01),
     0 0 20px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .logo-card:hover {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .logo {
-    font-size: 24px;
-    margin-right: 10px;
+  font-size: 24px;
+  margin-right: 10px;
 }
 
 .logo:hover {
-    filter: drop-shadow(0 0 2em #000000aa);
+  filter: drop-shadow(0 0 2em #000000aa);
 }
+
