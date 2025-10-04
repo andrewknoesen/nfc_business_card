@@ -17,4 +17,3 @@ jobs:
       - uses: renovatebot/github-action@v43.0.14
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --localDir=/github/workspace
