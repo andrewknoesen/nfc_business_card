@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy package files first for better layer caching
 # This layer only rebuilds when package.json or package-lock.json changes
-COPY virtual_business_card/package*.json ./
+COPY package*.json ./
 
 # Use npm ci for faster, deterministic installs in Docker
 # npm ci is 2-3x faster than npm install in CI/CD environments
@@ -14,7 +14,7 @@ RUN npm ci --only=production=false
 
 # Copy source code
 # This comes after npm ci so code changes don't invalidate the dependency layer
-COPY virtual_business_card/ .
+COPY . .
 
 # Build the application
 RUN npm run build
@@ -30,7 +30,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Security: Run as non-root user
 RUN addgroup -g 101 -S nginx && \
