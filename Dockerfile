@@ -1,0 +1,54 @@
+# Stage 1: Install dependencies and build
+FROM node:20-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first for better layer caching
+# This layer only rebuilds when package.json or package-lock.json changes
+COPY virtual_business_card/package*.json ./
+
+# Use npm ci for faster, deterministic installs in Docker
+# npm ci is 2-3x faster than npm install in CI/CD environments
+RUN npm ci --only=production=false
+
+# Copy source code
+# This comes after npm ci so code changes don't invalidate the dependency layer
+COPY virtual_business_card/ .
+
+# Build the application
+RUN npm run build
+
+# Stage 2: Production image with nginx
+FROM nginx:alpine
+
+# Remove default nginx static assets
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy built files from builder stage
+# Adjust the path if your build outputs to a different directory
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Security: Run as non-root user
+RUN addgroup -g 101 -S nginx && \
+    adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx && \
+    chown -R nginx:nginx /usr/share/nginx/html && \
+    chown -R nginx:nginx /var/cache/nginx && \
+    chown -R nginx:nginx /var/log/nginx && \
+    chown -R nginx:nginx /etc/nginx/conf.d && \
+    touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/run/nginx.pid
+
+USER nginx
+
+EXPOSE 80
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]
+
