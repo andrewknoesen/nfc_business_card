@@ -59,41 +59,34 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Generate release notes
-        id: release_notes
-        run: |
-          cat > release_notes.md << 'EOF'
-          ## Docker Images
-
-          Pull this release:
-          ```
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
-          ```
-
-          ### Available tags:
-          - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}`
-          - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest`
-
-          ### Helm Installation
-
-          Update your `values.yaml`:
-          ```
-          image:
-            repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            tag: "${{ steps.version.outputs.version }}"
-          ```
-
-          Then install or upgrade:
-          ```
-          helm upgrade --install virtual-business-card ./helm/virtual-business-card
-          ```
-          EOF
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: release_notes.md
+          body: |
+            ## Docker Images
+
+            Pull this release:
+            ```
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+            ```
+
+            ### Available tags:
+            - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}`
+            - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest`
+
+            ### Helm Installation
+
+            Update your `values.yaml`:
+            ```
+            image:
+              repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+              tag: "${{ steps.version.outputs.version }}"
+            ```
+
+            Then install or upgrade:
+            ```
+            helm upgrade --install virtual-business-card ./helm/virtual-business-card
+            ```
           draft: false
           prerelease: false
         env:
