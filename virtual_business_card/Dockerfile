@@ -10,7 +10,7 @@ COPY package*.json ./
 
 # Use npm ci for faster, deterministic installs in Docker
 # npm ci is 2-3x faster than npm install in CI/CD environments
-RUN npm ci --only=production=false
+RUN npm ci
 
 # Copy source code
 # This comes after npm ci so code changes don't invalidate the dependency layer
