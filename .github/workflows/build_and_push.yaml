@@ -7,6 +7,7 @@ on:
       - develop
     paths:
       - "virtual_business_card/**"
+      - "Dockerfile"
       - ".github/workflows/build-and-push.yaml"
   workflow_dispatch:
 
@@ -18,9 +19,8 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
-      id-token: write
 
     steps:
       - name: Checkout repository
@@ -54,51 +54,22 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # GitHub Actions cache - fastest option
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
-            VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
 
-      - name: Generate short SHA
-        id: sha
-        run: echo "short=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
-
-      - name: Update Helm values
-        if: github.ref == 'refs/heads/main'
+      - name: Output image information
         run: |
-          # Update image tag
-          sed -i 's|tag: .*|tag: "main-${{ steps.sha.outputs.short }}"|' helm/virtual-business-card/values.yaml
-
-          # Update image repository
-          sed -i 's|repository: .*|repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}|' helm/virtual-business-card/values.yaml
-
-          # Display changes
-          echo "Updated Helm values:"
-          grep -A 3 "image:" helm/virtual-business-card/values.yaml
-
-      - name: Commit and push Helm changes
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add helm/virtual-business-card/values.yaml
-
-          # Only commit if there are changes
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "chore: update image tag to main-${{ steps.sha.outputs.short }}"
-            git push
-          fi
-
-      - name: Image summary
-        run: |
-          echo "### 🚀 Docker Image Built Successfully" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Docker Image Built and Pushed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** \`${{ env.REGISTRY }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
           echo '```
           echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Pull command:**" >> $GITHUB_STEP_SUMMARY
+          echo '```
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main-${SHORT_SHA}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
