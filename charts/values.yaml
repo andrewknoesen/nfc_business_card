@@ -5,6 +5,14 @@ image:
 
 replicaCount: 2
 
+ingress:
+    enabled: true
+    className: "traefik"
+    hosts:
+      - host: k3s.knoesen.link
+        paths:
+          - path: /
+            pathType: Prefix
 service:
   type: LoadBalancer
   port: 80
